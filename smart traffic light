@@ -1,0 +1,117 @@
+// 핀 설정
+const int trigPin = 7;       // 초음파 센서 Trig 핀
+const int echoPin = 6;       // 초음파 센서 Echo 핀
+
+const int carRedLED = 8;     // 차량 신호등 빨간색 LED 핀
+const int carYellowLED = 9;  // 차량 신호등 노란색 LED 핀
+const int carGreenLED = 10;  // 차량 신호등 초록색 LED 핀
+
+const int pedestrianRedLED = 11;   // 보행자 신호등 빨간색 LED 핀
+const int pedestrianGreenLED = 12; // 보행자 신호등 초록색 LED 핀
+
+long duration, distance;
+const int detectionDistance = 50; // 감지 거리 (50cm 이하 시 감지)
+const int yellowBlinkDelay = 500; // 노란색 LED 깜빡임 간격
+unsigned long detectionStartTime = 0; // 감지 시작 시간
+bool isPedestrianDetected = false;    // 보행자가 감지된 상태
+bool trafficLightChanged = false;     // 신호등이 변경된 상태
+unsigned long trafficLightChangeTime = 0; // 신호등 변경 시간
+
+void setup() {
+  pinMode(trigPin, OUTPUT);    
+  pinMode(echoPin, INPUT);     
+  pinMode(carRedLED, OUTPUT);     
+  pinMode(carYellowLED, OUTPUT);  
+  pinMode(carGreenLED, OUTPUT);   
+  pinMode(pedestrianRedLED, OUTPUT);     
+  pinMode(pedestrianGreenLED, OUTPUT);  
+  
+  // 모든 LED 끄기
+  digitalWrite(carRedLED, LOW);
+  digitalWrite(carYellowLED, LOW);
+  digitalWrite(carGreenLED, LOW);
+  digitalWrite(pedestrianRedLED, HIGH); // 보행자 신호등 빨간색으로 시작
+  digitalWrite(pedestrianGreenLED, LOW);
+
+  Serial.begin(9600);   // 시리얼 통신 시작
+}
+
+void loop() {
+  // 거리 측정
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.034 / 2;
+
+  unsigned long currentMillis = millis();
+
+  // 보행자 감지 및 신호등 제어
+  if (distance > 0 && distance <= detectionDistance) { 
+    if (!isPedestrianDetected) {
+      // 보행자 감지가 처음 시작될 때 시간 기록
+      isPedestrianDetected = true;
+      detectionStartTime = currentMillis;
+    } 
+    else if (!trafficLightChanged && (currentMillis - detectionStartTime >= 5000)) {
+      // 5초 동안 보행자가 감지된 경우 신호등 변경
+      trafficLightChanged = true;
+      trafficLightChangeTime = currentMillis;
+
+      // 차량 신호등 빨간색, 보행자 신호등 초록색 켜기
+      digitalWrite(carRedLED, HIGH);
+      digitalWrite(carYellowLED, LOW);
+      digitalWrite(carGreenLED, LOW);
+      digitalWrite(pedestrianRedLED, LOW);
+      digitalWrite(pedestrianGreenLED, HIGH);
+
+      Serial.println("Pedestrian detected for 5 seconds: Car Red, Pedestrian Green");
+    } else if (!trafficLightChanged) {
+      // 보행자가 감지된 5초 동안 차량 신호등 노란색 깜빡임 유지
+      digitalWrite(carRedLED, LOW);
+      digitalWrite(carGreenLED, LOW);
+      
+      digitalWrite(carYellowLED, HIGH);
+      delay(yellowBlinkDelay);
+      digitalWrite(carYellowLED, LOW);
+      delay(yellowBlinkDelay);
+
+      Serial.println("Pedestrian detected but not yet for 5 seconds: Car Yellow Blinking");
+    }
+  } else {
+    isPedestrianDetected = false;
+
+    // 신호등이 변경된 상태에서 10초 유지
+    if (trafficLightChanged && (currentMillis - trafficLightChangeTime < 10000)) {
+      // 10초 동안 차량 신호등은 빨간색, 보행자 신호등은 초록색 유지
+      digitalWrite(carRedLED, HIGH);
+      digitalWrite(carYellowLED, LOW);
+      digitalWrite(carGreenLED, LOW);
+      digitalWrite(pedestrianRedLED, LOW);
+      digitalWrite(pedestrianGreenLED, HIGH);
+    } else {
+      // 10초가 지나면 초기화
+      trafficLightChanged = false;
+
+      // 차량 신호등 노란색 깜빡임
+      digitalWrite(carRedLED, LOW);
+      digitalWrite(carGreenLED, LOW);
+      
+      digitalWrite(carYellowLED, HIGH);
+      delay(yellowBlinkDelay);
+      digitalWrite(carYellowLED, LOW);
+      delay(yellowBlinkDelay);
+
+      // 보행자 신호등 빨간색 유지
+      digitalWrite(pedestrianRedLED, HIGH);
+      digitalWrite(pedestrianGreenLED, LOW);
+
+      Serial.println("No pedestrian detected: Car Yellow Blinking");
+    }
+  }
+
+  delay(200); // 루프 지연
+}
