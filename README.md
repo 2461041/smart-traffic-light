@@ -33,4 +33,5 @@
 - 신호등 제어장치 설계 및 제작
 - 신호등 알고리즘 설계
 - 신호등의 시운전
-- ![1](https://github.com/2461041/smart-traffic-light/blob/main/noname01.png)
+![1](https://github.com/2461041/smart-traffic-light/blob/main/noname01.png)
+![2](https://github.com/2461041/smart-traffic-light/blob/main/noname2.png)
