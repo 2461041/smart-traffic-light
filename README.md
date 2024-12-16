@@ -34,7 +34,8 @@
 - 신호등 알고리즘 설계
 - 신호등의 시운전
 
-![1](https://github.com/2461041/smart-traffic-light/blob/main/noname01.png)
+![nonmqe01](https://github.com/2461041/smart-traffic-light/blob/main/noname01.png)
+![noname02](https://github.com/2461041/smart-traffic-light/blob/main/noname02.png)
 
 
 ## 6. 구현 방법
@@ -53,5 +54,48 @@
 
 #### (2) 추진체계
 
-   5-(2)-1. 핀과 변수 설정
+   1. 핀과 변수 설정
    - 핀 설정
+
+   ![c1](https://github.com/2461041/smart-traffic-light/blob/main/c01.png)
+
+    - trigPin과 echoPin: 초음파 센서의 트리거(Trig) 핀과 반사된 초음파를 수신하는 Echo 핀을 설정합니다.   
+    - carRedLED, carYellowLED, carGreenLED: 차량 신호등의 빨간불, 노란불, 초록불을 제어하는 핀입니다.  
+    - pedestrianRedLED, pedestrianGreenLED: 보행자 신호등의 빨간불, 초록불을 제어하는 핀입니다.
+
+
+- 보행자 감지 및 신호 제어 변수
+ 
+![c2](https://github.com/2461041/smart-traffic-light/blob/main/c02.png)
+
+    - lastDetectionTime: 보행자가 처음으로 감지된 시간을 기록하여 신호등 변경을 제어합니다.
+    - pedestrianGreenStartTime, carGreenStartTime: 각각 보행자 신호등과 차량 신호등이 초록불로 변경된 시간을 기록하여, 10초 동안의 타이머를 관리합니다.
+    - pedestrianDetected: 보행자가 감지되었는지 여부를 나타냅니다.
+    - signalChanged: 신호등이 이미 변경되었는지 여부를 추적합니다.
+    - carGreenChanged: 차량 신호등의 초록불이 변경된 후에 체크하는 변수입니다.
+
+2. stup 함수
+  - 핀모드 설정
+  - 초음파 센서 모드 설정]
+  - 초기 LED 상태 설정
+
+  ![c03](https://github.com/2461041/smart-traffic-light/blob/main/c03.png)
+
+    - pinMode를 사용하여 신호등과 초음파 센서의 핀을 출력(OUTPUT) 또는 입력(INPUT)으로 설정합니다.
+    - 초기 상태에서는 보행자 신호등은 빨간불로, 차량 신호등은 모두 꺼짐 상태로 설정됩니다.
+
+
+3. loop 함수
+
+![c04](https://github.com/2461041/smart-traffic-light/blob/main/c04.png)
+
+    - 초음파 센서를 이용해 보행자의 거리를 측정합니다. trigPin에 신호를 보내고, echoPin에서 돌아오는 신호를 받아 시간을 측정합니다. 그 후 거리를 계산합니다.
+    - 보행자가 50cm 이내에 있으면 pedestrianDetected를 true로 설정하여 보행자가 감지된 것을 인식합니다.
+   3-5. 보행자 신호등 제어
+
+ ![c05]([https://github.com/2461041/smart-traffic-light/blob/main/c03.png](https://github.com/2461041/smart-traffic-light/blob/main/c05.png))
+   3-6. 차량 신호등 초록색 전환
+   3-7. 차량 신호등 10초 후 초기화
+   3-8. 차량 신호등 노란불 점멸
+   3-9. 보행자 감지되지 않으면 초기 상태 유지
+   
