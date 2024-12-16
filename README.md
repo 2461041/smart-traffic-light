@@ -35,7 +35,7 @@
 - 신호등의 시운전
 
 ![1](https://github.com/2461041/smart-traffic-light/blob/main/noname01.png)
-![2](https://github.com/2461041/smart-traffic-light/blob/main/noname2.png)
+
 
 ## 6. 구현 방법
 (1) 구현방법
