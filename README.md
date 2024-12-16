@@ -93,9 +93,34 @@
     - 보행자가 50cm 이내에 있으면 pedestrianDetected를 true로 설정하여 보행자가 감지된 것을 인식합니다.
    3-5. 보행자 신호등 제어
 
- ![c05]([https://github.com/2461041/smart-traffic-light/blob/main/c03.png](https://github.com/2461041/smart-traffic-light/blob/main/c05.png))
+ ![c05](https://github.com/2461041/smart-traffic-light/blob/main/c05.png)
+
+    - 보행자가 감지된 후 5초가 지나면, 보행자 신호등을 초록불로 변경하고 차량 신호등을 빨간불로 설정합니다.
+    - signalChanged를 true로 설정하여 신호등이 변경되었음을 기록하고, 보행자 신호등이 초록불로 변경된 시간을 pedestrianGreenStartTime에 저장합니다.
+
+    
    3-6. 차량 신호등 초록색 전환
+
+ ![c6](https://github.com/2461041/smart-traffic-light/blob/main/c06.png)
+
+    - 보행자 신호등이 초록불로 10초 동안 유지되면, 차량 신호등을 초록불로 변경합니다.
+    - 차량 신호등이 초록불로 변경된 시간을 carGreenStartTime에 저장하고, carGreenChange d를 true로 설정하여 차량 신호등이 변경되었음을 기록합니다.
+    
    3-7. 차량 신호등 10초 후 초기화
+
+ ![c07](https://github.com/2461041/smart-traffic-light/blob/main/c07.png)
+
+    - 차량 신호등이 초록불로 10초 동안 유지되면, 모든 신호등을 초기 상태로 돌아가게 합니다.
+    - signalChanged와 carGreenChanged를 false로 설정하여 신호등 상태를 리셋합니다.
+ 
    3-8. 차량 신호등 노란불 점멸
+
+ ![c08](https://github.com/2461041/smart-traffic-light/blob/main/c08.png) 
+
+     - 보행자가 감지되지 않은 경우, 차량 신호등의 노란불이 1초 간격으로 깜빡입니다.
+     
    3-9. 보행자 감지되지 않으면 초기 상태 유지
    
+ ![c09](https://github.com/2461041/smart-traffic-light/blob/main/c09.png)
+
+     - 보행자가 감지되지 않으면 신호등은 초기 상태로 돌아갑니다. 보행자 신호등은 빨간불이 켜지고, 차량 신호등은 모두 꺼집니다.
