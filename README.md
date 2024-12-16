@@ -36,3 +36,22 @@
 
 ![1](https://github.com/2461041/smart-traffic-light/blob/main/noname01.png)
 ![2](https://github.com/2461041/smart-traffic-light/blob/main/noname2.png)
+
+## 6. 구현 방법
+(1) 구현방법
+1. 핀과 변수 설정
+    - 핀 설정
+    - 보행자 감지 및 신호 제어 변수 
+2. setup 함수
+    - LED 핀 모드 설정
+    - 초음파 센서 모드 설정
+    - 초기 LED 상태 설정
+3. loop 함수
+    - 초음파 센서로 거리 측정
+    - 보행자 감지
+    - LED 제어
+
+(2) 추진체계
+
+   5-(2)-1. 핀과 변수 설정
+   - 핀 설정
